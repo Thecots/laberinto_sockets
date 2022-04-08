@@ -28,6 +28,16 @@ router.post('/img', (req,res) => {
   res.send(db)
 })
 
+router.get('/play', (req,res) => {
+  res.sendFile(path.join(__dirname+'/../public/html/play.html'))
+})
+
+router.post('/getmap',(req,res) => {
+  db = getdb()
+  db = db.find(n => n.id == req.body.id)
+  res.json({ok:true, data: db})
+})
+
 
 
 module.exports = router;

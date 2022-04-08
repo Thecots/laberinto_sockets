@@ -46,7 +46,7 @@
       t = '';
       r.forEach(n => {
         t += `
-        <div id="${n.id}">
+        <div onclick="window.location.href='/play?id=${n.id}'">
           <img src="${n.img}">
           <p>Autor: <b>${n.username}</b></p>
         </div>
