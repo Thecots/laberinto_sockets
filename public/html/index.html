@@ -7,16 +7,52 @@
   <title>Document</title>
   <script defer src="http://localhost:5030/socket.io/socket.io.js"></script>
 </head>
+<style>
+  body{
+    background-color: rgb(224, 238, 255);
+  }
+  main{
+    display: flex;
+    gap: 10px;
+  }
+  div{
+    width: fit-content;
+    background-color: rgb(255, 243, 209);
+    border: 5px solid;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  div img{
+    width: 150px;
+    height: 150px;
+  }
+
+  div p {
+    font-family: sans-serif;
+    font-family: 700;
+  }
+</style>
 <body>
+  <a href="/creador">Crear mapa</a><br>
   <main>
-   hola
-   <img>
+   
   </main>
   <script>
     fetch('/img',{method:'POST'})
     .then(r => r.json())
     .then(r => {
-      document.querySelector('img').src = r.img
+      t = '';
+      r.forEach(n => {
+        t += `
+        <div id="${n.id}">
+          <img src="${n.img}">
+          <p>Autor: <b>${n.username}</b></p>
+        </div>
+        `
+      });
+      document.querySelector('main').innerHTML = t
     })
   </script>
 </body>

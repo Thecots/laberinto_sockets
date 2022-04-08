@@ -25,7 +25,7 @@ router.post('/savemap',(req,res)=> {
 
 router.post('/img', (req,res) => {
   db = getdb()
-  res.send(db[0])
+  res.send(db)
 })
 
 
