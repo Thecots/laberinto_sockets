@@ -6,7 +6,7 @@ const io = require("socket.io")(5030, {
   }
 });
 
-const express = require('express');
+const express = require("express");
 const path = require('path');
 const app = express();
 
@@ -25,10 +25,9 @@ io.on('connection', socket => {
     socket.broadcast.emit('chat-message',data)
   })
 })
+
 /* routes */
-app.get('/',(req,res)=> {
-  res.sendFile(path.join(__dirname+'/public/index.html'))
-})
+app.use(require('./routes/main.routes'))
 
 /* listener */
 app.listen(5050,() => {
