@@ -3,13 +3,19 @@ const router = express.Router();
 const path = require('path');
 const {savedb, getdb} = require('../helpers/dbcontroller');
 
+
 router.get('/',(req,res)=> {
-  res.sendFile(path.join(__dirname+'/../public/html/index.html'))
+  res.render('index', {})
 })
 
-router.get('/creador',(req,res)=> {
+router.get('/crear_mapa',(req,res)=> {
   res.sendFile(path.join(__dirname+'/../public/html/creator.html'))
 })
+
+router.get('/crear_partida',(req,res)=> {
+  res.sendFile(path.join(__dirname+'/../public/html/creator.html'))
+})
+
 
 router.post('/savemap',(req,res)=> {
   db = getdb()
@@ -39,5 +45,10 @@ router.post('/getmap',(req,res) => {
 })
 
 
-
+/* io.on('connection', socket => {
+  socket.on('klk', e => {
+   console.log(e);
+  })
+})
+ */
 module.exports = router;

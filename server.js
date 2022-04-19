@@ -1,35 +1,26 @@
 console.clear();
 
-const io = require("socket.io")(5030, {
-  cors: {
-    origin: "*"
-  }
-});
-
-const express = require("express");
+const express = require('express');
+const app = express()
+const server = require('http').Server(app);
+const io = require('socket.io')(server)
 const path = require('path');
-const app = express();
+const { route } = require('./routes/main.routes');
 
 /* settings */
+app.set('views','./views')
+app.set('view engine','ejs')
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
-
-/* socket */
-io.on('connection', socket => {
-  socket.on('uconnect', data => {
-    socket.broadcast.emit('uconnected',data)
-  })
-
-  socket.on('send-chat-message', data => {
-    socket.broadcast.emit('chat-message',data)
-  })
-})
 
 /* routes */
-app.use(require('./routes/main.routes'))
+app.use( require('./routes/main.routes'))
+
 
 /* listener */
-app.listen(5050,() => {
-  console.log('http://localhost:5050');
+server.listen('3000', () => {
+  console.log('http://localhost:3000');
 })
+
+module.exports = {io}
