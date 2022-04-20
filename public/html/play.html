@@ -128,6 +128,7 @@
   img{display: none;}
 </style>
 <body>
+  <a href="/">salir</a>
   <main>
    <section class="canvasBox">
       <canvas class="canvas"></canvas>
@@ -136,8 +137,21 @@
       </canvas>
    </section>
   </main>
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
+    const socket = io('http://localhost:3000')
+
+
+    name = prompt('Nombre de usuario')
+    socket.emit('new-user', getQuery('id'), name)
+
+    socket.on('user-connected', r => {
+      console.log('user connected');
+    })
+
+
+
     /* settings */
     const canvasSize = 600
     const pixelSize = canvasSize / 20

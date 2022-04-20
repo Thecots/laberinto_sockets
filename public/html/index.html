@@ -4,56 +4,79 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script defer src="http://localhost:5030/socket.io/socket.io.js"></script>
+  <title>Home</title>
+  <link rel="stylesheet" href="/css/global.css">
 </head>
-<style>
-  body{
-    background-color: rgb(224, 238, 255);
-  }
-  main{
-    display: flex;
-    gap: 10px;
-  }
-  div{
-    width: fit-content;
-    background-color: rgb(255, 243, 209);
-    border: 5px solid;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
-  }
-
-  div img{
-    width: 150px;
-    height: 150px;
-  }
-
-  div p {
-    font-family: sans-serif;
-    font-family: 700;
-  }
-</style>
 <body>
-  <a href="/creador">Crear mapa</a><br>
   <main>
-   
+    <header>
+      <h1>Partidas</h1>
+      <div>
+        <a href="/crear_partida">Crear partida</a>
+        <a href="/crear_mapa">Crear mapa</a>
+      </div>
+    </header>
+    <section class="games">
+    </section>
   </main>
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
   <script>
-    fetch('/img',{method:'POST'})
-    .then(r => r.json())
-    .then(r => {
-      t = '';
-      r.forEach(n => {
-        t += `
-        <div onclick="window.location.href='/play?id=${n.id}'">
-          <img src="${n.img}">
-          <p>Autor: <b>${n.username}</b></p>
+    const socket = io('http://localhost:3000')
+    let rooms = [];
+    class Partida{
+      constructor(id, title, creador, usuarios,maxusuarios){
+        this.id = id
+        this.title = title
+        this.creador = creador
+        this.usuarios = usuarios
+        this.maxusuarios = maxusuarios
+      }
+
+      draw(){
+        return `
+        <div>
+          <h1>${this.title}</h1>
+          <p>Creada por: <b>${this.creador}</b></p>
+          <p>${this.usuarios}/${this.maxusuarios} usuarios</p>
+          <a onclick="join('${this.id}')">Unirse</a>
         </div>
         `
-      });
-      document.querySelector('main').innerHTML = t
+      }
+    }
+
+    function update(){
+      rooms = []
+      fetch('/getGames',{
+      method: 'POST'
+      })
+      .then(r => r.json())
+      .then(r =>{
+        r.data.forEach((n,i) => {
+          rooms.push(new Partida(n.id,n.title, n.creator,n.players,n.playersSize))
+        });
+        printRooms();
+      })
+    }
+
+    function printRooms(){
+      document.querySelector('.games').innerHTML = ''
+      let t = '';
+      rooms.forEach(n => {
+        t += n.draw()
+      })
+      document.querySelector('.games').innerHTML = t
+    }
+
+    socket.on('update-rooms', r => {
+      update()
     })
+
+    function join(e){
+      let x = prompt('Nombre de usuario')
+      window.location.href = `/play?id=${e}`
+    }
+
+    update()
   </script>
 </body>
 </html>

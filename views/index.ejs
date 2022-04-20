@@ -19,19 +19,53 @@
       </div>
     </header>
     <section class="games">
-    <% if (!locals.lol) { %>
-      <div>
-        <h1>Partida 1</h1>
-        <p>Creada por: <b>Root</b></p>
-        <p>1 usuario/s conectados</p>
-        <a href="/jugar/1">Unirse</a>
-      </div>
-    <% }else{ %>
-     <section>
-       <h1>No hay partidas</h1>
-     </section>
-    <% } %> 
     </section>
   </main>
+  <script>
+    const rooms = [];
+
+    class Partida{
+      constructor(id, title, creador, usuarios,maxusuarios){
+        this.id = id
+        this.title = title
+        this.creador = creador
+        this.usuarios = usuarios
+        this.maxusuarios = maxusuarios
+      }
+
+      draw(){
+        return `
+        <div>
+          <h1>Partida ${this.title}</h1>
+          <p>Creada por: <b>${this.creador}</b></p>
+          <p>${this.usuarios}/${this.maxusuarios} usuarios</p>
+          <a href="/jugar/${this.id}">Unirse</a>
+        </div>
+        `
+      }
+    }
+
+
+
+    fetch('/getGames',{
+      method: 'POST'
+    })
+    .then(r => r.json())
+    .then(r =>{
+      r.data.forEach((n,i) => {
+        rooms.push(new Partida(n.id,n.title, n.creator,n.players,n.playersSize))
+      });
+      printRooms();
+    })
+
+
+    function printRooms(){
+      let t = '';
+      rooms.forEach(n => {
+        t += n.draw()
+      })
+      document.querySelector('.games').innerHTML = t
+    }
+  </script>
 </body>
 </html>

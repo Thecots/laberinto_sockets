@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Laberinto</title>
+
 </head>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
@@ -15,14 +16,15 @@
     font-family: 'Montserrat',sans-serif;
   }   
   body{
-    background: #d8e4fc;
+    background: #ffffff;
     display: flex;
     flex-direction: column;
+    padding: 10px;
   }
 
   main{
     position: relative;
-    margin: 50px auto;
+    margin: 20px auto;
     display: grid;
     gap: 10px;
     grid-template-areas: 
@@ -31,11 +33,16 @@
 
   .options{grid-area: options;}
   .canvas{grid-area: canvas;}
-  .tools{grid-area: tools;}
+  .canva{grid-area: tools;}
+
+  .options section,.canvas, .tools{
+    border: 5px solid;
+  }
 
   .canvas{
     background: rgb(255, 255, 255);
     z-index: 5;
+
   }
 
   .options section{
@@ -80,7 +87,9 @@
   }
   
   .hover{
+    top: 0;
     left: 0;
+    border: 5px solid transparent;
     background: transparent;
     position: absolute;
     z-index: 10;
@@ -126,8 +135,51 @@
   }
 
   img{display: none;}
+
+  /* header */
+
+  
+header{
+  margin: 0 auto;
+  max-width: 100%;
+  width: 1500px;
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0px;
+  border-bottom: 2px solid;
+}
+
+header h1{
+  font-weight: 400;
+}
+
+header div{
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+header a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 30px;
+  font-weight: 15px;
+  text-decoration: none;
+  border-radius: 4px;
+  color: black;
+  background-color: rgb(238, 144, 144) ;
+  font-weight: 500;
+}
 </style>
 <body>
+  <header>
+    <h1>Creador de laberintos</h1>
+    <div>
+      <a href="/">Volver</a>
+    </div>
+  </header>
   <main>
    <section class="canvasBox">
       <canvas class="canvas"></canvas>
@@ -300,7 +352,7 @@
       fetch('/savemap',{
         method: 'POST',
         body: JSON.stringify({
-          user: 'root',
+          user: prompt('Nombre de usuario'),
           map: boardMap,
           img: document.querySelector('#mapimg').src
         }),
@@ -342,20 +394,6 @@
         n.color = 'white'
         n.draw()
       }
-    })
-  }
-
-  /* get level 1 */
-  function getLevel(){
-    fetch('http://127.0.0.1:5500/level1.json')
-    .then(response => response.json())
-    .then(r => {
-      arr = []
-      for (let i = 0; i < r.length; i++) {
-        arr.push(new Pixel(r[i].x,r[i].y,r[i].color))  
-      }
-      boardMap = arr;
-      printBoard(boardMap)
     })
   }
 

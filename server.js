@@ -3,9 +3,9 @@ console.clear();
 const express = require('express');
 const app = express()
 const server = require('http').Server(app);
-const io = require('socket.io')(server)
+const io = require('socket.io')(server);
+io_ = require('./routes/partida.routes').io_(io)
 const path = require('path');
-const { route } = require('./routes/main.routes');
 
 /* settings */
 app.set('views','./views')
@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 /* routes */
-app.use( require('./routes/main.routes'))
+app.use(require('./routes/main.routes').router)
 
 
 /* listener */

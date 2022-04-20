@@ -82,6 +82,10 @@ section.games div{
   justify-content: space-between;
 }
 
+section.games div:last-child{
+  border-bottom-style: none;
+}
+
 section.games div img {
   width: 50px;
 }
